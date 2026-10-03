@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Problem-Solving Diary</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    fieldset { margin-bottom: 1.5rem; }
+    label { display: block; margin-top: 0.5rem; font-weight: bold; }
+    input, textarea { width: 100%; padding: 0.4rem; margin-top: 0.2rem; }
+    button { margin-top: 0.8rem; padding: 0.5rem 1rem; cursor: pointer; }
+    .entry { border: 1px solid #ccc; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+    .entry h3 { margin-top: 0; }
+    .entry .field { margin: 0.3rem 0; }
+    .field strong { display: inline-block; min-width: 90px; }
+    .actions { margin-top: 0.5rem; }
+    .actions button { margin-right: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Problem-Solving Diary (dd)</h1>
+
+  <fieldset id="form-fieldset">
+    <legend>New Entry</legend>
+    <form id="diary-form">
+      <label>Tag &amp; Title
+        <input type="text" name="tag" placeholder="[dd-2026-10-03] Title" required />
+      </label>
+      <label>Symptom
+        <textarea name="symptom" rows="2" required></textarea>
+      </label>
+      <label>Tried
+        <textarea name="tried" rows="2" required></textarea>
+      </label>
+      <label>Root Cause
+        <textarea name="rootCause" rows="2" required></textarea>
+      </label>
+      <label>Fix
+        <textarea name="fix" rows="2" required></textarea>
+      </label>
+      <label>Lesson
+        <textarea name="lesson" rows="1" required></textarea>
+      </label>
+      <button type="submit">Save Entry</button>
+      <button type="button" id="cancel-edit" style="display:none;">Cancel</button>
+    </form>
+  </fieldset>
+
+  <div>
+    <input type="search" id="search-input" placeholder="Search by title or tag..." />
+  </div>
+
+  <div id="entries"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
