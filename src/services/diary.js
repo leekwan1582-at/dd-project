@@ -1,6 +1,6 @@
-import { supabase } from './supabaseClient.js';
+import { supabase } from "../lib/supabaseClient.js";
 
-const TABLE = 'debugging_diary';
+const TABLE = "debugging_diary";
 
 // Create
 export async function addEntry(entry) {
@@ -25,8 +25,8 @@ export async function addEntry(entry) {
 export async function getAllEntries() {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('*')
-    .order('created_at', { ascending: false });
+    .select("*")
+    .order("created_at", { ascending: false });
   if (error) throw error;
   return data;
 }
@@ -36,7 +36,7 @@ export async function updateEntry(id, updates) {
   const { data, error } = await supabase
     .from(TABLE)
     .update(updates)
-    .eq('id', id)
+    .eq("id", id)
     .select()
     .single();
   if (error) throw error;
@@ -45,20 +45,13 @@ export async function updateEntry(id, updates) {
 
 // Delete
 export async function deleteEntry(id) {
-  const { error } = await supabase
-    .from(TABLE)
-    .delete()
-    .eq('id', id);
+  const { error } = await supabase.from(TABLE).delete().eq("id", id);
   if (error) throw error;
 }
 
 // Search by title or tag
 export async function searchEntries(query) {
-  const { data, error } = await supabase
-    .from(TABLE)
-    .select('*')
-    .or(`title.ilike.%${query}%,tag.ilike.%${query}%`)
-    .order('created_at', { ascending: false });
+  const { data, error } = await supabase.rpc("search_diary", { q: query });
   if (error) throw error;
   return data;
 }
