@@ -11,9 +11,28 @@ import "./styles/main.css";
 
 const entriesContainer = document.getElementById("entries");
 const searchInput = document.getElementById("search-input");
+const consoleContainer = document.getElementById("console-container");
+const consoleOutput = document.getElementById("console-output");
 
 let editingId = null;
 let cachedEntries = [];
+
+/**
+ * Appends a line to the on-page console and reveals it, so failures are not
+ * silently swallowed by the "No entries yet." empty state.
+ *
+ * @param {"info" | "error"} kind - Severity, used as a CSS modifier.
+ * @param {string} text - Message text, inserted as text (never HTML).
+ * @returns {void}
+ */
+function logMessage(kind, text) {
+  const line = document.createElement("div");
+  line.className = `console-line console-line--${kind}`;
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+  consoleOutput.append(line);
+  consoleContainer.hidden = false;
+  consoleOutput.scrollTop = consoleOutput.scrollHeight;
+}
 
 const form = EntryForm({
   onSubmit: async (data) => {
@@ -35,7 +54,7 @@ const form = EntryForm({
       form.reset();
       await load();
     } catch (err) {
-      alert("Save failed: " + err.message);
+      logMessage("error", "Save failed: " + err.message);
     }
   },
   onCancel: () => {
@@ -45,8 +64,16 @@ const form = EntryForm({
 });
 
 async function load() {
-  cachedEntries = await getAllEntries();
-  draw(cachedEntries);
+  try {
+    cachedEntries = await getAllEntries();
+    draw(cachedEntries);
+    logMessage(
+      "info",
+      `Loaded ${cachedEntries.length} ${cachedEntries.length === 1 ? "entry" : "entries"}.`,
+    );
+  } catch (err) {
+    logMessage("error", "Load failed: " + err.message);
+  }
 }
 
 function draw(entries) {
@@ -59,8 +86,12 @@ function draw(entries) {
     },
     onDelete: async (id) => {
       if (!confirm("Delete this entry?")) return;
-      await deleteEntry(id);
-      await load();
+      try {
+        await deleteEntry(id);
+        await load();
+      } catch (err) {
+        logMessage("error", "Delete failed: " + err.message);
+      }
     },
   });
 }
@@ -71,8 +102,13 @@ searchInput.addEventListener("input", () => {
   searchTimer = setTimeout(async () => {
     const q = searchInput.value.trim();
     if (!q) return draw(cachedEntries);
-    const results = await searchEntries(q);
-    draw(results);
+    try {
+      const results = await searchEntries(q);
+      draw(results);
+      logMessage("info", `Search "${q}" returned ${results.length}.`);
+    } catch (err) {
+      logMessage("error", "Search failed: " + err.message);
+    }
   }, 250);
 });
 

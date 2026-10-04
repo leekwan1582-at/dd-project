@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+.opencode
+package-lock.json
+public
+supabase
+.env
+.env.example

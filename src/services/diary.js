@@ -49,7 +49,7 @@ export async function deleteEntry(id) {
   if (error) throw error;
 }
 
-// Search by title or tag
+// Search by title or tag (server-side via the `search_diary` RPC)
 export async function searchEntries(query) {
   const { data, error } = await supabase.rpc("search_diary", { q: query });
   if (error) throw error;

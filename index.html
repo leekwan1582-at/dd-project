@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Problem-Solving Diary</title>
     <link rel="stylesheet" href="/src/styles/main.css" />
   </head>
@@ -57,6 +58,16 @@
     </div>
 
     <div id="entries"></div>
+
+    <section id="console-container" class="console-container" hidden>
+      <h2>Console Output</h2>
+      <div
+        id="console-output"
+        class="console-output"
+        role="status"
+        aria-live="polite"
+      ></div>
+    </section>
 
     <script type="module" src="/src/main.js"></script>
   </body>
